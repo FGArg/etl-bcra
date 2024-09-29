@@ -79,8 +79,6 @@ coverage.xml
 *.log
 
 # Docker
-docker-compose*.yaml
-Dockerfile
 .dockerignore
 
 # MySQL / SQL Lite
