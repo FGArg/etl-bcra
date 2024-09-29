@@ -5,7 +5,7 @@ from etl_bcra.extract_variables import extract_variables
 from etl_bcra.transform_variables import transform_variables
 from etl_bcra.extract_series import extract_series
 from etl_bcra.transform_series import transform_series
-from etl_bcra.db_utils import load_table, read_table 
+from etl_bcra.db_utils import load_table, read_table
 
 default_args = {
     'owner': 'airflow',
@@ -16,11 +16,13 @@ default_args = {
     'retries': 1,
 }
 
+
 def etl_variables():
     variables_df = extract_variables()
     if variables_df is not None:
         variables_df = transform_variables(variables_df)
         load_table(variables_df, "bcra_principales_variables")
+
 
 def etl_series():
     variables_df = read_table("bcra_principales_variables")
@@ -30,14 +32,15 @@ def etl_series():
             series_df = transform_series(series_df)
             load_table(series_df, "bcra_series")
 
+
 with DAG(
     'etl_bcra_dag',
     default_args=default_args,
     description='ETL pipeline del BRCA',
     schedule_interval='@daily',
     catchup=False,
-    
-    ) as dag:
+
+) as dag:
 
     etl_variables_task = PythonOperator(
         task_id='etl_variables',
