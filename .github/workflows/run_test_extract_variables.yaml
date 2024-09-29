@@ -27,5 +27,6 @@ jobs:
 
     - name: Run tests
       run: |
-        export PYTHONPATH=.
-        ./.venv/bin/pytest tests/etl_bcra/test_extract_variables.py
+        PYTHONPATH=. pytest tests/etl_bcra/test_extract_variables.py
+
+
