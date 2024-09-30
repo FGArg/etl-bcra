@@ -7,6 +7,8 @@ from etl_bcra.extract_series import extract_series
 from etl_bcra.transform_series import transform_series
 from etl_bcra.db_utils import load_table, read_table
 
+from sqlalchemy.exc import NoSuchTableError
+
 default_args = {
     'owner': 'airflow',
     'start_date': days_ago(1),
@@ -19,18 +21,22 @@ default_args = {
 
 def etl_variables():
     variables_df = extract_variables()
-    if variables_df is not None:
-        variables_df = transform_variables(variables_df)
-        load_table(variables_df, "bcra_principales_variables")
+    variables_df = transform_variables(variables_df)
+    load_table(variables_df, "bcra_principales_variables")
 
 
 def etl_series():
     variables_df = read_table("bcra_principales_variables")
-    if variables_df is not None:
-        series_df = extract_series(variables_df)
-        if series_df is not None:
-            series_df = transform_series(series_df)
-            load_table(series_df, "bcra_series")
+    new_series_df = extract_series(variables_df)
+
+    try:
+        actual_series_df = read_table("bcra_series")
+    except NoSuchTableError:
+        print("NoSuchTableError: bcra_series")
+        actual_series_df = None
+
+    series_df = transform_series(actual_series_df, new_series_df)
+    load_table(series_df, "bcra_series")
 
 
 with DAG(

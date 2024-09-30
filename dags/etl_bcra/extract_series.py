@@ -11,35 +11,30 @@ def extract_series(df_variables):
 
     dfs = []
 
-    try:
-        for index, row in df_variables.iterrows():
-            id_variable = row['idVariable']
-            short_code = row['short_code']
+    for index, row in df_variables.iterrows():
+        id_variable = row['idvariable']
+        short_code = row['short_code']
 
-            url = f'https://api.bcra.gob.ar/estadisticas/v2.0/DatosVariable/{id_variable}/{start_date}/{end_date}'
+        url = f'https://api.bcra.gob.ar/estadisticas/v2.0/DatosVariable/{id_variable}/{start_date}/{end_date}'
 
-            print(f"Fetching data for variable ID: {id_variable}")
+        print(f"Fetching data for variable ID: {id_variable}")
 
-            response = requests.get(url, verify=False)
+        response = requests.get(url, verify=False)
 
-            data = response.json()
-            df = pd.DataFrame(data['results'])
+        data = response.json()
+        df = pd.DataFrame(data['results'])
 
-            # Renombramos la columna con el short_code de la variable
-            df = df[['fecha', 'valor']].rename(columns={'valor': short_code})
+        # Renombramos la columna con el short_code de la variable
+        df = df[['fecha', 'valor']].rename(columns={'valor': short_code})
 
-            dfs.append(df)
+        dfs.append(df)
 
-        # Merge del dataframe
-        df_merged = dfs[0]
-        for df in dfs[1:]:
-            df_merged = pd.merge(df_merged, df, on='fecha', how='outer')
+    # Merge del dataframe
+    df_merged = dfs[0]
+    for df in dfs[1:]:
+        df_merged = pd.merge(df_merged, df, on='fecha', how='outer')
 
-        # Ordenamiento cronológico
-        df_pivot = df_merged.sort_values('fecha').reset_index(drop=True)
+    # Ordenamiento cronológico
+    df_pivot = df_merged.sort_values('fecha').reset_index(drop=True)
 
-        return df_pivot
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data: {e}")
-        return None
+    return df_pivot
