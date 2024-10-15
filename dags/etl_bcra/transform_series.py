@@ -14,9 +14,6 @@ def transform_series(df_actual_series, df_new_series):
         df_updated_series = pd.concat([df_old_series, df_new_series], ignore_index=True)
 
         # Sanity check: eliminación de duplicados
-        df_updated_series = df_updated_series.drop_duplicates(subset='fecha', keep='last')
-
-        # Ordenamiento cronológico
-        df_updated_series = df_updated_series.sort_values('fecha').reset_index(drop=True)
+        df_updated_series = df_updated_series.drop_duplicates(subset='fecha', keep='last').reset_index(drop=True)
 
     return df_updated_series

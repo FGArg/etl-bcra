@@ -21,8 +21,14 @@ El objetivo es automatizar la extracción, transformación y carga (ETL) de dato
    cd etl-bcra
    ```
 
-2. **(Opcional) Configuración de la conexión remota a una base de datos externa:** 
-  Para conectarte a una base de datos (como AWS Redshift), configura las variables necesarias en un archivo `.env`, en el directorio raíz del proyecto. 
+2. **Configura la variable de entorno `AIRFLOW_UID`** 
+   Ejecuta el siguiente comando en la terminal para crear un archivo `.env` en el directorio raíz del proyecto, que almacene el ID de usuario actual. Esta variable es necesaria para que Airflow funcione correctamente con los permisos de Docker:
+
+   ```bash
+   echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+3. **(Opcional) Configuración de la conexión remota a una base de datos externa:** 
+  Para conectarte a una base de datos (como AWS Redshift), configura las variables necesarias en el archivo `.env`. 
   Debes definir las siguientes variables:
   - `SQL_ALCHEMY_CONN`: La cadena de conexión a la base de datos en formato SQLAlchemy
   - `POSTGRES_DB_SCHEMA`: El nombre del esquema de la base de datos.
@@ -36,21 +42,21 @@ El objetivo es automatizar la extracción, transformación y carga (ETL) de dato
 
     Esto asegurará que Airflow pueda conectarse a tu base de datos externa y ejecutar las operaciones necesarias.
 
-3. **Instala las dependencias:** 
+4. **Instala las dependencias:** 
   Asegúrate de tener Docker instalado. Luego, puedes levantar los servicios usando Docker Compose:
 
    ```bash
    docker compose up airflow-init
    ```
 
-4. **Levanta el contenedor:** 
+5. **Levanta el contenedor:** 
   Después de inicializar Airflow, puedes levantar todos los servicios necesarios del pipeline ejecutando el siguiente comando:
 
    ```bash
    docker-compose up
    ```
 
-5. **Iniciar el pipeline:** 
+6. **Iniciar el pipeline:** 
   Accede al servidor de Airflow para monitorear y ejecutar los DAGs.
 
    ```bash
@@ -92,7 +98,13 @@ The goal is to automate the extraction, transformation and loading (ETL) of econ
    cd etl-bcra
    ```
 
-2. **(Optional) Configuring the remote connection to an external database:** 
+2. **Set the `AIRFLOW_UID` environment variable** 
+   Run the following command in the terminal to create a `.env` file in the root directory of the project, which will store the current user ID. This variable is required for Airflow to work properly with Docker permissions:
+
+   ```bash
+   echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+3. **(Optional) Configuring the remote connection to an external database:** 
   To connect to a database (such as AWS Redshift), set up the necessary variables in a `.env` file, in the root directory of the project. 
   You must define the following variables:
   - `SQL_ALCHEMY_CONN`: The database connection string in SQLAlchemy format.
@@ -107,21 +119,21 @@ The goal is to automate the extraction, transformation and loading (ETL) of econ
 
     This will ensure that Airflow can connect to your external database and execute the necessary operations.
 
-3. **Install the dependencies:** 
+4. **Install the dependencies:** 
   Make sure you have Docker installed. Then, you can pull up the services using Docker Compose:
 
    ```bash
    docker compose up airflow-init
    ```
 
-4. **Raise the container:** 
+5. **Raise the container:** 
   After initializing Airflow, you can raise all the necessary services from the pipeline by running the following command:
 
    ```bash
    docker-compose up
    ```
 
-5. **Start the pipeline:** 
+6. **Start the pipeline:** 
   Access the Airflow server to monitor and run the DAGs.
 
    ```bash
