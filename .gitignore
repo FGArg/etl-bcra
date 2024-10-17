@@ -99,6 +99,9 @@ logs/
 *.parquet
 *.json
 
+# Include short_code_mapping.json 
+!resources/short_code_mapping.json
+
 # Ignore backup files
 *.bak
 *.swp
