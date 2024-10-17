@@ -24,14 +24,14 @@ default_args = {
 
 
 def etl_variables():
-    
+
     dag_directory = os.path.dirname(os.path.abspath(__file__))
     json_file_path = os.path.join(dag_directory, '../resources/short_code_mapping.json')
     json_file_path = os.path.abspath(json_file_path)
 
     with open(json_file_path, 'r') as file:
         short_code_mapping = json.load(file)
-    
+
     variables_df = extract_variables()
     variables_df = transform_variables(variables_df, short_code_mapping)
     load_table(variables_df, "bcra_principales_variables")
